@@ -19,12 +19,19 @@ static NSString * const reuseIdentifier = @"CategoryItemCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGFloat SCREEN_WIDTH = CGRectGetWidth([[UIScreen mainScreen] bounds]);
+    CGFloat width = (SCREEN_WIDTH - 3*(1.f/[[UIScreen mainScreen] scale]))/3.f;
+    
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     
-    layout.minimumInteritemSpacing = -1.f/[[UIScreen mainScreen] scale];
-    layout.minimumLineSpacing = -1.f/[[UIScreen mainScreen] scale];
-
+    layout.minimumInteritemSpacing = 1.f/[[UIScreen mainScreen] scale];
+    layout.minimumLineSpacing = 1.f/[[UIScreen mainScreen] scale];
+    layout.itemSize = CGSizeMake(width, width);
     [self.collectionView setCollectionViewLayout:layout];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return TRUE;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,22 +52,10 @@ static NSString * const reuseIdentifier = @"CategoryItemCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor grayColor];
-    cell.layer.borderWidth = 1.f/[[UIScreen mainScreen] scale];
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout*)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    CGFloat SCREEN_WIDTH = CGRectGetWidth([[UIScreen mainScreen] bounds]);
-    CGFloat width = ceilf((SCREEN_WIDTH)/3.f), height = width;
-    // because 320/3 < 107 + 107 + 107, there was 1 pix margin after 2nd colomn
-    return CGSizeMake(width, height);
-}
-
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
